@@ -15,7 +15,7 @@ export const Register = async (req, res) =>{
             res.json({
                 ok:true,
                 msj:"Las contraseñas coinciden",
-                status: 298
+                status: 298,
             })
             db.end()
         }else{
@@ -37,7 +37,7 @@ export const Login = async (req, res) =>{
         const Validate = TableUsers[0]
         console.log('Validacion:', Validate)
         if(Validate){
-            console.log("correo = ",Validate.email," clave = ",Validate.password)
+            console.log("correo = ",Validate.correo," clave = ",Validate.password)
             const compare = await bcrypt.compare(password,Validate.password)
             if(compare){
                     response = {
