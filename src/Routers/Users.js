@@ -6,4 +6,8 @@ const Routerusers = Router()
 Routerusers.post('/Register', controllusers.Register)
 Routerusers.post('/Login', controllusers.Login)
 
+Routerusers.get('/users', controllusers.getUsers)
+
+Routerusers.put('/editUsers', controllusers.putUsers)
+
 export default Routerusers

@@ -84,8 +84,34 @@ export const Login = async (req, res) =>{
         //     console.log('true') 
         // }
         // console.log('Tabla: ',TableUsers[0])
-        // db.end()
+        db.end()
     } catch (error) {
         console.log('Error en el inicio de sesion: ', error)
+    }
+}
+
+export const getUsers = async (req, res)=>{
+    try { 
+        const db = await connect()
+        const [response] = await db.query("SELECT * FROM users")
+        console.log(response)
+        res.json(response)
+        db.end()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const putUsers = async (req, res)=>{
+    try {
+        const {Id, roles} = req.body 
+        console.log("Actualizando id: ", Id, 'Actualizando categoria= ', roles)   
+        const db = await connect()
+        const response = await db.query("UPDATE users SET roles = ? WHERE Id = ?",[roles, Id])
+        res.json({msj:"Actualizado Roles"})
+        db.end()
+    } catch (error) {
+        console.log('Error en la subida: ', error)
+        res.json({msj: "Error"}) 
     }
 }
