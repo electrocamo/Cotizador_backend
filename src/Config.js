@@ -8,3 +8,6 @@ export const config = {
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
 }
+
+// export const urlarchivos = '/root/BackendCotizador/uploads'
+export const urlarchivos = '/Users/adrian/Desktop/Ander/PROYECTOS/BackendCotizador'

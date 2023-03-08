@@ -1,17 +1,22 @@
 import express  from "express";
 import morgan from "morgan"
 import cors from "cors"
-import Routerusers from "./Routers/Users";
-import RouterClient from "./Routers/Client";
-import Routerquotes from "./Routers/Quotes";
+import RouterClient from "./routers/client";
+import Routerquotes from "./routers/quotes";
+import RouterProducts from "./routers/products";
+import Routerusers from "./routers/users";
+import { urlarchivos } from "./config";
 
 const app = express() 
 
 app.use(cors())
 app.use(morgan('dev'))
 app.use(express.json())
-app.use(Routerusers)
 app.use(RouterClient)
 app.use(Routerquotes)
+app.use(RouterProducts)  
+app.use(Routerusers)
+
+app.use("/Image", express.static(urlarchivos))
 
 export default app

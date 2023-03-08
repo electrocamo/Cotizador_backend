@@ -4,6 +4,6 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-app.listen(3800, () => {
-    console.log(`Backend Cotizador PORT = 3800`)
+app.listen(3200, () => {
+    console.log(`Backend Cotizador PORT = 3200`)
   })

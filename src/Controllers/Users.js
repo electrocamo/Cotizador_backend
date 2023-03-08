@@ -24,6 +24,11 @@ export const Register = async (req, res) =>{
         }
     } catch (error) {
         console.log('Error en la creacion: ', error)
+	res.json({
+		ok:false,
+		msj:error,
+		status:983,
+	})
     }
 }
 
