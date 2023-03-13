@@ -20,12 +20,15 @@ Routerquotes.post('/Uploadfile', upload.array('file', [10]), controllquotes.Uplo
 Routerquotes.post('/addquotes', controllquotes.postQuotes)
 Routerquotes.post('/addquotesandclien', controllquotes.postQuotesaddCLient)
 Routerquotes.post('/addhistoryProduct', controllquotes.posthistoryproduct)
+Routerquotes.post('/edithistoryProduct', controllquotes.editthistoryproduct)
 
 Routerquotes.get('/quotes', controllquotes.getquotes)
 Routerquotes.get('/historyproduct', controllquotes.gethistoryproduct)
 
 Routerquotes.put('/editQuotes', controllquotes.putQuotes)
+Routerquotes.put('/editHistorialProducto', controllquotes.putEditHistory)
 
 Routerquotes.delete('/Borrar-quotes', controllquotes.deleteimage)
+Routerquotes.delete('/borrarHistorialProducto', controllquotes.deleteHistoryProduct)
 
 export default Routerquotes

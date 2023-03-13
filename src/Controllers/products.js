@@ -33,3 +33,17 @@ export const postproduct = async (req, res) =>{
         console.log('Error en la creacion: ', error)
     }
 }
+
+export const deleteProduct = async (req, res)=>{
+    try {
+        const {Id} = req.body 
+        console.log("Borrar: ", Id)   
+        const db = await connect()
+        const response = await db.query("DELETE From productos WHERE Id = ?",Id)
+        res.json({msj:"Borrar Productos"})
+        db.end()
+    } catch (error) {
+        console.log('Error en la  eliminacion de imagen: ', error)
+        res.json({msj: "Error"}) 
+    }
+}

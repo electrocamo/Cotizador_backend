@@ -7,4 +7,7 @@ RouterProducts.post('/addproduct', controllproducts.postproduct)
 
 RouterProducts.get('/products', controllproducts.getproducts)
 
+RouterProducts.delete('/borrarProducto', controllproducts.deleteProduct)
+
+
 export default RouterProducts
