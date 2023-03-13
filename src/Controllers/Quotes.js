@@ -189,7 +189,7 @@ export const putEditHistory = async (req, res)=>{
         const db = await connect()
         const response = await db.query("UPDATE historialproductos SET producto = ?, material = ?, calibre = ?, largo = ?, ancho = ?, precioitem = ?, cantidadItem = ?, total = ? WHERE Id = ?",
         [producto, material, calibre, largo, ancho, precioitem, itemtotal, total, Id])
-        res.json({msj:"Actualizado Cotizacion"})
+        res.json({msj:"Actualizado producto"})
         db.end()
     } catch (error) {
         console.log('Error en la subida: ', error)

@@ -47,3 +47,18 @@ export const deleteProduct = async (req, res)=>{
         res.json({msj: "Error"}) 
     }
 }
+
+export const putEditProduct = async (req, res)=>{
+    try {
+        const {Id, producto, material, calibre, largo, ancho, precioitem} = req.body 
+        console.log("Actualizando id: ", Id, 'Actualizando numero de factura= ', producto)   
+        const db = await connect()
+        const response = await db.query("UPDATE productos SET producto = ?, material = ?, calibre = ?, largo = ?, ancho = ?, precioitem = ? WHERE Id = ?",
+        [producto, material, calibre, largo, ancho, precioitem, Id])
+        res.json({msj:"Actualizado producto"})
+        db.end()
+    } catch (error) {
+        console.log('Error en la subida: ', error)
+        res.json({msj: error}) 
+    }
+}
