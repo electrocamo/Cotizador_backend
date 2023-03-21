@@ -134,9 +134,9 @@ export const posthistoryproduct = async (req, res) =>{
 export const editthistoryproduct = async (req, res) =>{
     try {
         console.log('Estamos intentando crear una nueva cotizacion')
-        const {product, material, caliber, long, width, itemPrice, totalItem, total, nrocotizacion} = req.body
+        const {product, material, caliber, long, width, itemPrice, totalItem, total, nrocotizacion, iva, Priceiva} = req.body
             const db = await connect()
-            const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion) VALUES (?,?,?,?,?,?,?,?,?)",[product, material, caliber, long, width, itemPrice, totalItem, total,nrocotizacion])
+            const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion, iva, Priceiva) VALUES (?,?,?,?,?,?,?,?,?,?,?)",[product, material, caliber, long, width, itemPrice, totalItem, total, nrocotizacion, Priceiva])
             // idNumberQuotes.push(Id)
             // const updatenroquotes = await db.query("UPDATE cotizaciones SET nrofactura = ? WHERE nrocotizacion = ?",[nrofactura, nrocotizacion])
             // idNumberQuotes = []
@@ -185,11 +185,11 @@ export const putQuotes = async (req, res)=>{
 
 export const putEditHistory = async (req, res)=>{
     try {
-        const {Id, producto, material, ancho, largo, calibre, itemtotal, precioitem, total, iva, Priceiva} = req.body 
-        console.log("Actualizando id: ", Id, 'Actualizando productos= ', producto, 'Actualizando material= ', material, 'Actualizando ancho= ', ancho, 'Actualizando largo= ', largo, 'Actualizando calibre= ', calibre, 'Actualizando itemtotal= ', itemtotal, 'Actualizando precio item= ', precioitem, 'Actualizando total= ', total, 'Actualizando iva= ',iva, 'Actualizando precioiva= ', Priceiva)   
+        const {Id, producto, material, ancho, largo, calibre, itemtotal, precioitem, total} = req.body 
+        console.log("Actualizando id: ", Id, 'Actualizando numero de factura= ', producto)   
         const db = await connect()
-        const response = await db.query("UPDATE historialproductos SET producto = ?, material = ?, calibre = ?, largo = ?, ancho = ?, precioitem = ?, cantidadItem = ?, total = ?, iva = ?, Priceiva = ? WHERE Id = ?",
-        [producto, material, calibre, largo, ancho, precioitem, itemtotal, total, iva, Priceiva, Id])
+        const response = await db.query("UPDATE historialproductos SET producto = ?, material = ?, calibre = ?, largo = ?, ancho = ?, precioitem = ?, cantidadItem = ?, total = ? WHERE Id = ?",
+        [producto, material, calibre, largo, ancho, precioitem, itemtotal, total, Id])
         res.json({msj:"Actualizado producto"})
         db.end()
     } catch (error) {

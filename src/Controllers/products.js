@@ -15,9 +15,9 @@ export const getproducts = async (req, res)=>{
 export const postproduct = async (req, res) =>{
     try {
         console.log('Estamos intentando crear una nueva cotizacion')
-        const {product, material, caliber, long, width, price} = req.body
+        const {product, material, caliber, long, width, price, iva} = req.body
             const db = await connect()
-            const response = await db.query("INSERT INTO productos(producto, material, calibre, largo, ancho, precioitem) VALUES (?,?,?,?,?,?)",[product, material, caliber, long, width, price])
+            const response = await db.query("INSERT INTO productos(producto, material, calibre, largo, ancho, precioitem, iva) VALUES (?,?,?,?,?,?,?)",[product, material, caliber, long, width, price, iva])
             res.json({
                 ok:true,
                 msj:"Producto creado",

@@ -6,11 +6,21 @@ const saltRounds = 10
 export const Register = async (req, res) =>{
     try {
         console.log('Estamos intentando crear un nuevo perfil')
-        const {name, surNames, type, numbreDocument, phone, email, password, checkPassword} = req.body
+        const {name, surNames, type, numbreDocument, phone, email, password, checkPassword, rol} = req.body
+        console.log("Dato 1: ", name)
+        console.log("Dato 2:", surNames)
+        console.log("Dato 3: ", type)
+        console.log("Dato 4: ", numbreDocument)
+        console.log("Dato 5:", phone)
+        console.log("Dato 6: ", email)
+        console.log("Dato 7:", password)
+        console.log("Dato 8: ", checkPassword)
+        console.log("Dato 9: ", rol)
+        console.log("Todos: ", name, surNames, type, numbreDocument, phone, email, password, checkPassword, rol)
         if(password == checkPassword){
             const hashed = await bcrypt.hash(password, saltRounds);
             const db = await connect()
-            const response = await db.query("INSERT INTO users(nombre, apellidos, tipo, cc, correo, telefono, password) VALUES (?,?,?,?,?,?,?)",[name, surNames, type, numbreDocument, email, phone, hashed])
+            const response = await db.query("INSERT INTO users(nombre, apellidos, tipo, cc, correo, telefono, password, roles) VALUES (?,?,?,?,?,?,?,?)",[name, surNames, type, numbreDocument, email, phone, hashed, rol])
             console.log(`El usuario ${name} a creado correctamente con contrasena `)
             res.json({
                 ok:true,

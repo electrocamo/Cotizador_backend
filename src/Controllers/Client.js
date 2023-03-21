@@ -30,3 +30,32 @@ export const postClient = async (req, res) =>{
         console.log('Error en la creacion: ', error)
     }
 }
+
+export const putEditClient = async (req, res)=>{
+    try {
+        const {id, name, numbreDocument, phone, email, direction, contact} = req.body 
+        console.log("Actualizando id: ", id, 'Actualizando cliente= ', name)   
+        const db = await connect()
+        const response = await db.query("UPDATE clientes SET cliente = ?, telefono = ?, correo = ?, nitocc = ?, contacto = ?, direccion = ? WHERE Id = ?",
+        [name, phone, email, numbreDocument, contact, direction, id])
+        res.json({msj:"Actualizado cliente"})
+        db.end()
+    } catch (error) {
+        console.log('Error en la subida: ', error)
+        res.json({msj: error}) 
+    }
+}
+
+export const deleteCliente = async (req, res)=>{
+    try {
+        const {Id} = req.body 
+        console.log("Borrar: ", Id)   
+        const db = await connect()
+        const response = await db.query("DELETE From clientes WHERE Id = ?",Id)
+        res.json({msj:"Borrar cliente"})
+        db.end()
+    } catch (error) {
+        console.log('Error en la  eliminacion del cliente: ', error)
+        res.json({msj: "Error"}) 
+    }
+}

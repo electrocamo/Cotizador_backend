@@ -9,5 +9,5 @@ export const config = {
     database: process.env.DATABASE,
 }
 
-// export const urlarchivos = '/root/BackendCotizador/uploads'
-export const urlarchivos = '/Users/adrian/Desktop/Ander/PROYECTOS/BackendCotizador'
+ export const urlarchivos = '/root/BackendCotizador/uploads'
+//export const urlarchivos = '/Users/adrian/Desktop/Ander/PROYECTOS/BackendCotizador'
