@@ -15,7 +15,7 @@ export const getCLient = async (req, res)=>{
 
 export const postClient = async (req, res) =>{
     try {
-        console.log('Estamos intentando crear un nuevo perfil')
+        console.log('Estamos intentando crear un nuevo cliente')
         const {name, surName, phone, email, numbreDocument, contact, direction} = req.body
             const db = await connect()
             const response = await db.query("INSERT INTO clientes(cliente, telefono, correo, nitocc, contacto, direccion) VALUES (?,?,?,?,?,?)",[name, phone, email, numbreDocument, contact, direction])
@@ -33,8 +33,8 @@ export const postClient = async (req, res) =>{
 
 export const putEditClient = async (req, res)=>{
     try {
+        console.log("Estamos intentando editar un cliente")   
         const {id, name, numbreDocument, phone, email, direction, contact} = req.body 
-        console.log("Actualizando id: ", id, 'Actualizando cliente= ', name)   
         const db = await connect()
         const response = await db.query("UPDATE clientes SET cliente = ?, telefono = ?, correo = ?, nitocc = ?, contacto = ?, direccion = ? WHERE Id = ?",
         [name, phone, email, numbreDocument, contact, direction, id])

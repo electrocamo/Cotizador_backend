@@ -10,4 +10,6 @@ Routerusers.get('/users', controllusers.getUsers)
 
 Routerusers.put('/editUsers', controllusers.putUsers)
 
+Routerusers.delete('/borrarUsers', controllusers.deleteUsers)
+
 export default Routerusers

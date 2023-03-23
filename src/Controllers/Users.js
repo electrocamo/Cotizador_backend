@@ -7,16 +7,6 @@ export const Register = async (req, res) =>{
     try {
         console.log('Estamos intentando crear un nuevo perfil')
         const {name, surNames, type, numbreDocument, phone, email, password, checkPassword, rol} = req.body
-        console.log("Dato 1: ", name)
-        console.log("Dato 2:", surNames)
-        console.log("Dato 3: ", type)
-        console.log("Dato 4: ", numbreDocument)
-        console.log("Dato 5:", phone)
-        console.log("Dato 6: ", email)
-        console.log("Dato 7:", password)
-        console.log("Dato 8: ", checkPassword)
-        console.log("Dato 9: ", rol)
-        console.log("Todos: ", name, surNames, type, numbreDocument, phone, email, password, checkPassword, rol)
         if(password == checkPassword){
             const hashed = await bcrypt.hash(password, saltRounds);
             const db = await connect()
@@ -119,14 +109,30 @@ export const getUsers = async (req, res)=>{
 
 export const putUsers = async (req, res)=>{
     try {
-        const {Id, roles} = req.body 
-        console.log("Actualizando id: ", Id, 'Actualizando categoria= ', roles)   
+        const {Id, name, surNames, type, numbreDocument, phone, email, roles} = req.body 
+        console.log("Actualizando Usuario")   
         const db = await connect()
-        const response = await db.query("UPDATE users SET roles = ? WHERE Id = ?",[roles, Id])
-        res.json({msj:"Actualizado Roles"})
+        const response = await db.query("UPDATE users SET nombre = ?, apellidos = ? , tipo = ?, cc = ? , correo = ?, telefono = ?, roles = ? WHERE Id = ?",[name, surNames, type, numbreDocument, email, phone, roles, Id]).catch((error)=>{console.log("Error: ", error)});
+        console.log("response: ", response)
+        res.json({msj:"Actualizado Usuario"})
         db.end()
     } catch (error) {
         console.log('Error en la subida: ', error)
+        res.json({msj: "Error"}) 
+    }
+}
+
+
+export const deleteUsers = async (req, res)=>{
+    try {
+        const {Id} = req.body 
+        console.log("Borrar: ", Id)   
+        const db = await connect()
+        const response = await db.query("DELETE From users WHERE Id = ?",Id)
+        res.json({msj:"Borrar usuario"})
+        db.end()
+    } catch (error) {
+        console.log('Error en la  eliminacion de producto: ', error)
         res.json({msj: "Error"}) 
     }
 }

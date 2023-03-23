@@ -33,7 +33,7 @@ export const gethistoryproduct = async (req, res)=>{
 
 export const postQuotesaddCLient = async (req, res) =>{
     try {
-        console.log('Estamos intentando crear un nuevo perfil')
+        console.log('Estamos intentando crear una nueva cotizacion con cliente nuevo')
         const {date, seller, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image, priceEnd, itemEnd} = req.body
             const db = await connect()
             await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -63,7 +63,7 @@ export const postQuotesaddCLient = async (req, res) =>{
 
 export const postQuotes = async (req, res) =>{
         try {
-        console.log('Estamos intentando crear un nuevo perfil')
+        console.log('Estamos intentando crear una nueva cotizacion')
         const {date, seller, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image,  priceEnd, itemEnd} = req.body
             const db = await connect()
             await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -93,23 +93,13 @@ export const postQuotes = async (req, res) =>{
 
 export const posthistoryproduct = async (req, res) =>{
     try {
-        console.log('Estamos intentando crear una nueva cotizacion')
-        const {product, material, caliber, long, width, itemPrice, totalItem, total, iva, Priceiva} = req.body
-            console.log('Req Body:')
-            console.log("productos: ", product)
-            console.log("material: ", material)
-            console.log("Calibre: ", caliber)
-            console.log("Largo: ", long)
-            console.log("ancho: ", width)
-            console.log("precio item: ", itemPrice)
-            console.log("total item: ", totalItem)
-            console.log("Precio total ", total)
-	    console.log("Precio total ", iva)
+        console.log('Estamos intentando crear un nuevo producto en el historial')
+        const {product, material, caliber, long, width, itemPrice, totalItem, total, iva, Priceiva, weight} = req.body
             const db = await connect()
             await db.query("SELECT MAX(nrocotizacion) as n FROM cotizaciones")
             .then(async(res) => {
                 console.log("El id de cotizacion: ",res[0][0].n)
-                const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion, iva, Priceiva) VALUES (?,?,?,?,?,?,?,?,?,?,?)",[product, material, caliber, long, width, itemPrice, totalItem, total, res[0][0].n, iva, Priceiva])
+                const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion, iva, Priceiva, peso) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",[product, material, caliber, long, width, itemPrice, totalItem, total, res[0][0].n, iva, Priceiva, weight])
             }
             )
             // idNumberQuotes.push(Id)
@@ -133,10 +123,10 @@ export const posthistoryproduct = async (req, res) =>{
 
 export const editthistoryproduct = async (req, res) =>{
     try {
-        console.log('Estamos intentando crear una nueva cotizacion')
-        const {product, material, caliber, long, width, itemPrice, totalItem, total, nrocotizacion} = req.body
+        console.log('Estamos intentando crear un producto en el historial')
+        const {product, material, caliber, long, width, itemPrice, totalItem, total, nrocotizacion,  iva, Priceiva, weight} = req.body
             const db = await connect()
-            const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion) VALUES (?,?,?,?,?,?,?,?,?)",[product, material, caliber, long, width, itemPrice, totalItem, total,nrocotizacion])
+            const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion,  iva, Priceiva, peso) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",[product, material, caliber, long, width, itemPrice, totalItem, total,nrocotizacion, iva, Priceiva, weight])
             // idNumberQuotes.push(Id)
             // const updatenroquotes = await db.query("UPDATE cotizaciones SET nrofactura = ? WHERE nrocotizacion = ?",[nrofactura, nrocotizacion])
             // idNumberQuotes = []
@@ -170,8 +160,8 @@ export const Uploadfile = async (req, res) =>{
 
 export const putQuotes = async (req, res)=>{
     try {
+        console.log("Estamos intentando editar una cotizacion")   
         const {nrocotizacion, cliente, documento, contacto, telefono, direccion, correo, vendedor, abono, factura, tiempo, imagen, preciofinal, itemfinal, debe} = req.body 
-        console.log("Actualizando id: ", nrocotizacion, 'Actualizando vendedor= ', vendedor, 'Actualizando documento= ', documento, 'Actualizando direccion= ', direccion,  'Actualizando contacto= ', contacto, 'Actualizando correo= ', correo, 'Actualizando telefono= ', telefono, 'Actualizando abono= ', abono, 'Actualizando factura= ', factura, 'Actualizando debe= ', debe, 'Actualizando cliente= ', cliente, 'Actualizando imagen= ',imagen, 'Actualizando tiempo= ', tiempo, 'Actualizando preciofinal= ', preciofinal, 'Actualizando itemfinal= ', itemfinal, 'Actualizando nrocotizacion= ', nrocotizacion)   
         const db = await connect()
         const response = await db.query("UPDATE cotizaciones SET asesor = ?, nitocc = ?, direccion = ?, contacto = ?, correo = ?, telefono = ?, abono = ?, nrofactura = ?, debe = ?, cliente = ?, image = ?, fechaentrega = ?, preciofinal = ?, itemfinal = ? WHERE nrocotizacion = ?",
         [vendedor, documento, direccion,  contacto, correo, telefono, abono, factura, debe, cliente, imagen, tiempo, preciofinal, itemfinal, nrocotizacion])
@@ -183,13 +173,28 @@ export const putQuotes = async (req, res)=>{
     }
 }
 
+export const putEditState = async (req, res)=>{
+    try {
+        console.log("Estamos intentando editar un cliente")   
+        const {state, nrocotizacion } = req.body 
+        const db = await connect()
+        const response = await db.query("UPDATE cotizaciones SET estado = ? WHERE nrocotizacion = ?",
+        [state, nrocotizacion])
+        res.json({msj:"Actualizado cliente"})
+        db.end()
+    } catch (error) {
+        console.log('Error en la subida: ', error)
+        res.json({msj: error}) 
+    }
+}
+
 export const putEditHistory = async (req, res)=>{
     try {
-        const {Id, producto, material, ancho, largo, calibre, itemtotal, precioitem, total, iva, Priceiva} = req.body 
-        console.log("Actualizando id: ", Id, 'Actualizando productos= ', producto, 'Actualizando material= ', material, 'Actualizando ancho= ', ancho, 'Actualizando largo= ', largo, 'Actualizando calibre= ', calibre, 'Actualizando itemtotal= ', itemtotal, 'Actualizando precio item= ', precioitem, 'Actualizando total= ', total, 'Actualizando iva= ',iva, 'Actualizando precioiva= ', Priceiva)   
+        console.log("Estamos intentando editar un producto del historial")   
+        const {Id, producto, material, ancho, largo, calibre, itemtotal, precioitem, total, iva, Priceiva, peso} = req.body 
         const db = await connect()
-        const response = await db.query("UPDATE historialproductos SET producto = ?, material = ?, calibre = ?, largo = ?, ancho = ?, precioitem = ?, cantidadItem = ?, total = ?, iva = ?, Priceiva = ? WHERE Id = ?",
-        [producto, material, calibre, largo, ancho, precioitem, itemtotal, total, iva, Priceiva, Id])
+        const response = await db.query("UPDATE historialproductos SET producto = ?, material = ?, calibre = ?, largo = ?, ancho = ?, precioitem = ?, cantidadItem = ?, total = ?, iva = ?, Priceiva = ?, peso = ? WHERE Id = ?",
+        [producto, material, calibre, largo, ancho, precioitem, itemtotal, total, iva, Priceiva, peso, Id])
         res.json({msj:"Actualizado producto"})
         db.end()
     } catch (error) {

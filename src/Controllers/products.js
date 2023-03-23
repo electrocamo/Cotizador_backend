@@ -14,7 +14,7 @@ export const getproducts = async (req, res)=>{
 
 export const postproduct = async (req, res) =>{
     try {
-        console.log('Estamos intentando crear una nueva cotizacion')
+        console.log('Estamos intentando crear un nuevo producto')
         const {product, material, caliber, long, width, price, iva} = req.body
             const db = await connect()
             const response = await db.query("INSERT INTO productos(producto, material, calibre, largo, ancho, precioitem, iva) VALUES (?,?,?,?,?,?,?)",[product, material, caliber, long, width, price, iva])
@@ -50,8 +50,8 @@ export const deleteProduct = async (req, res)=>{
 
 export const putEditProduct = async (req, res)=>{
     try {
+        console.log("Estamos intentando editar un producto")   
         const {Id, producto, material, calibre, largo, ancho, precioitem} = req.body 
-        console.log("Actualizando id: ", Id, 'Actualizando numero de factura= ', producto)   
         const db = await connect()
         const response = await db.query("UPDATE productos SET producto = ?, material = ?, calibre = ?, largo = ?, ancho = ?, precioitem = ? WHERE Id = ?",
         [producto, material, calibre, largo, ancho, precioitem, Id])

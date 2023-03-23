@@ -27,6 +27,7 @@ Routerquotes.get('/historyproduct', controllquotes.gethistoryproduct)
 
 Routerquotes.put('/editQuotes', controllquotes.putQuotes)
 Routerquotes.put('/editHistorialProducto', controllquotes.putEditHistory)
+Routerquotes.put('/editState', controllquotes.putEditState)
 
 Routerquotes.delete('/Borrar-quotes', controllquotes.deleteimage)
 Routerquotes.delete('/borrarHistorialProducto', controllquotes.deleteHistoryProduct)
