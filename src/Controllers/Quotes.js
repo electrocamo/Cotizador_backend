@@ -177,6 +177,7 @@ export const putEditState = async (req, res)=>{
     try {
         console.log("Estamos intentando editar un cliente")   
         const {state, nrocotizacion } = req.body 
+        console.log("Cambiando el estado a: ", state, "Del numero de cotizacion: ", nrocotizacion)
         const db = await connect()
         const response = await db.query("UPDATE cotizaciones SET estado = ? WHERE nrocotizacion = ?",
         [state, nrocotizacion])
