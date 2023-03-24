@@ -38,18 +38,15 @@ export const postQuotesaddCLient = async (req, res) =>{
             const db = await connect()
             await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image, priceEnd, itemEnd])
+            const clientTable = await db.query("INSERT INTO clientes(nitocc, direccion, contacto, telefono, cliente, correo) VALUES (?,?,?,?,?,?)",
+            [citizenshipCard, direction, contact, phone, client, email])
             .then((response) => {
                 res.json({
                     ok:true,
-                    msj:"Cotizacion creado",
+                    msj:"Cliente y Cotizacion creado",
                     status: 300,
                 })
             })
-            const clientTable = await db.query("INSERT INTO clientes(nitocc, direccion, contacto, telefono, cliente, correo) VALUES (?,?,?,?,?,?)",[citizenshipCard, direction, contact, phone, client, email])
-            // const [Id] = await db.query("SELECT MAX(nrocotizacion) FROM cotizaciones;")
-            // console.log('Id: ', Id[0])
-            // idNumberQuotes.push(Id)
-	        //console.log(`El usuario ${name} a creado correctamente con contrasena `)
             db.end()
     } catch (error) {
         console.log('Error en la creacion: ', error)
