@@ -51,10 +51,10 @@ export const deleteProduct = async (req, res)=>{
 export const putEditProduct = async (req, res)=>{
     try {
         console.log("Estamos intentando editar un producto")   
-        const {Id, producto, material, calibre, largo, ancho, precioitem} = req.body 
+        const {Id, producto, material, calibre, largo, ancho, precioitem, iva} = req.body 
         const db = await connect()
-        const response = await db.query("UPDATE productos SET producto = ?, material = ?, calibre = ?, largo = ?, ancho = ?, precioitem = ? WHERE Id = ?",
-        [producto, material, calibre, largo, ancho, precioitem, Id])
+        const response = await db.query("UPDATE productos SET producto = ?, material = ?, calibre = ?, largo = ?, ancho = ?, precioitem = ?, iva = ? WHERE Id = ?",
+        [producto, material, calibre, largo, ancho, precioitem, iva, Id])
         res.json({msj:"Actualizado producto"})
         db.end()
     } catch (error) {
