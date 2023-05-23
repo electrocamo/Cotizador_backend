@@ -8,9 +8,7 @@ export const getquotes = async (req, res)=>{
         response.map((item)=>{
             var deliveryDate = '' + item.fecha
             deliveryDate = deliveryDate.split('T')[0];
-            console.log("data: ", deliveryDate);
         })
-        console.log(response)
         res.json(response)
         db.end()
     } catch (error) {
@@ -23,7 +21,6 @@ export const gethistoryproduct = async (req, res)=>{
     try { 
         const db = await connect()
         const [response] = await db.query("SELECT * FROM historialproductos")
-        console.log(response)
         res.json(response)
         db.end()
     } catch (error) {
@@ -34,12 +31,12 @@ export const gethistoryproduct = async (req, res)=>{
 export const postQuotesaddCLient = async (req, res) =>{
     try {
         console.log('Estamos intentando crear una nueva cotizacion con cliente nuevo')
-        const {date, seller, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image, priceEnd, itemEnd} = req.body
+        const {date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image, priceEnd, itemEnd,observation} = req.body
             const db = await connect()
-            await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image, priceEnd, itemEnd])
-            const clientTable = await db.query("INSERT INTO clientes(nitocc, direccion, contacto, telefono, cliente, correo) VALUES (?,?,?,?,?,?)",
-            [citizenshipCard, direction, contact, phone, client, email])
+            await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image, priceEnd, itemEnd,observation, typeDocument])
+            const clientTable = await db.query("INSERT INTO clientes(nitocc, direccion, contacto, telefono, cliente, correo, documentType) VALUES (?,?,?,?,?,?,?)",
+            [citizenshipCard, direction, contact, phone, client, email, typeDocument])
             .then((response) => {
                 res.json({
                     ok:true,
@@ -61,10 +58,10 @@ export const postQuotesaddCLient = async (req, res) =>{
 export const postQuotes = async (req, res) =>{
         try {
         console.log('Estamos intentando crear una nueva cotizacion')
-        const {date, seller, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image,  priceEnd, itemEnd} = req.body
+        const {date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image,  priceEnd, itemEnd,observation} = req.body
             const db = await connect()
-            await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image,  priceEnd, itemEnd])
+            await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image,  priceEnd, itemEnd, observation, typeDocument])
             .then((response) => {
                 res.json({
                     ok:true,
@@ -72,11 +69,7 @@ export const postQuotes = async (req, res) =>{
                     status: 300,
                 })
             })
-            // //const clientTable = await db.query("INSERT INTO clientes(nitocc, direccion, contacto, telefono, cliente, correo) VALUES (?,?,?,?,?,?)",[citizenshipCard, direction, contact, phone, client, email])
-            // const [Id] = await db.query("SELECT MAX(nrocotizacion) as n FROM cotizaciones")
-            // console.log("Id: " + Id[0][0])
-            // idNumberQuotes.push(Id)
-            // console.log('idNumberQuotes: ', idNumberQuotes[0][0].n)
+
             db.end()
     } catch (error) {
         console.log('Error en la creacion: ', error)
@@ -97,11 +90,8 @@ export const posthistoryproduct = async (req, res) =>{
             .then(async(res) => {
                 console.log("El id de cotizacion: ",res[0][0].n)
                 const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion, iva, Priceiva, peso) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",[product, material, caliber, long, width, itemPrice, totalItem, total, res[0][0].n, iva, Priceiva, weight])
-            }
-            )
-            // idNumberQuotes.push(Id)
-            // const updatenroquotes = await db.query("UPDATE cotizaciones SET nrofactura = ? WHERE nrocotizacion = ?",[nrofactura, nrocotizacion])
-            // idNumberQuotes = []
+            })
+
             res.json({
                 ok:true,
                 msj:"Producto creado",
@@ -124,9 +114,7 @@ export const editthistoryproduct = async (req, res) =>{
         const {product, material, caliber, long, width, itemPrice, totalItem, total, nrocotizacion,  iva, Priceiva, weight} = req.body
             const db = await connect()
             const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion,  iva, Priceiva, peso) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",[product, material, caliber, long, width, itemPrice, totalItem, total,nrocotizacion, iva, Priceiva, weight])
-            // idNumberQuotes.push(Id)
-            // const updatenroquotes = await db.query("UPDATE cotizaciones SET nrofactura = ? WHERE nrocotizacion = ?",[nrofactura, nrocotizacion])
-            // idNumberQuotes = []
+
             res.json({
                 ok:true,
                 msj:"Producto creado",
@@ -158,10 +146,11 @@ export const Uploadfile = async (req, res) =>{
 export const putQuotes = async (req, res)=>{
     try {
         console.log("Estamos intentando editar una cotizacion")   
-        const {nrocotizacion, cliente, documento, contacto, telefono, direccion, correo, vendedor, abono, factura, tiempo, imagen, preciofinal, itemfinal, debe} = req.body 
+        const {nrocotizacion, cliente, typeDocument, documento, contacto, telefono, direccion, correo, vendedor, abono, factura, tiempo, imagen, preciofinal, itemfinal, debe, observation} = req.body 
+        console.log("typeDocument: ", typeDocument)
         const db = await connect()
-        const response = await db.query("UPDATE cotizaciones SET asesor = ?, nitocc = ?, direccion = ?, contacto = ?, correo = ?, telefono = ?, abono = ?, nrofactura = ?, debe = ?, cliente = ?, image = ?, fechaentrega = ?, preciofinal = ?, itemfinal = ? WHERE nrocotizacion = ?",
-        [vendedor, documento, direccion,  contacto, correo, telefono, abono, factura, debe, cliente, imagen, tiempo, preciofinal, itemfinal, nrocotizacion])
+        const response = await db.query("UPDATE cotizaciones SET asesor = ?, nitocc = ?, direccion = ?, contacto = ?, correo = ?, telefono = ?, abono = ?, nrofactura = ?, debe = ?, cliente = ?, image = ?, fechaentrega = ?, preciofinal = ?, itemfinal = ?, observation = ?, documentType = ? WHERE nrocotizacion = ?",
+        [vendedor, documento, direccion,  contacto, correo, telefono, abono, factura, debe, cliente, imagen, tiempo, preciofinal, itemfinal, observation, typeDocument, nrocotizacion])
         res.json({msj:"Actualizado Cotizacion"})
         db.end()
     } catch (error) {
@@ -207,7 +196,11 @@ export const deleteimage = async (req, res)=>{
         console.log("Borrar: ", nrocotizacion)   
         const db = await connect()
         const response = await db.query("DELETE From cotizaciones WHERE nrocotizacion = ?",nrocotizacion)
-        rm("/root/BackendCotizador/uploads"+ImageDelete)     
+        if(ImageDelete == ''){
+            console.log("ImageDelete esta vacio")
+        }else{
+            rm("/Users/adrian/Desktop/Ander/Backupproyects/BackendCotizadorGeniosTec/uploads/"+ImageDelete)     
+        }
         res.json({msj:"Borrar Cotizacion"})
         db.end()
     } catch (error) {
