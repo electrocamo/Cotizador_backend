@@ -21,6 +21,7 @@ Routerquotes.post('/addquotes', controllquotes.postQuotes)
 Routerquotes.post('/addquotesandclien', controllquotes.postQuotesaddCLient)
 Routerquotes.post('/addhistoryProduct', controllquotes.posthistoryproduct)
 Routerquotes.post('/edithistoryProduct', controllquotes.editthistoryproduct)
+Routerquotes.post('/remission', controllquotes.getRemission)
 
 Routerquotes.get('/quotes', controllquotes.getquotes)
 Routerquotes.get('/historyproduct', controllquotes.gethistoryproduct)

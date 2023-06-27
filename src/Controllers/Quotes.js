@@ -88,7 +88,7 @@ export const posthistoryproduct = async (req, res) =>{
             const db = await connect()
             await db.query("SELECT MAX(nrocotizacion) as n FROM cotizaciones")
             .then(async(res) => {
-                console.log("El id de cotizacion: ",res[0][0].n)
+                //console.log("El id de cotizacion: ",res[0][0].n)
                 const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion, iva, Priceiva, peso) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",[product, material, caliber, long, width, itemPrice, totalItem, total, res[0][0].n, iva, Priceiva, weight])
             })
 
@@ -220,5 +220,38 @@ export const deleteHistoryProduct = async (req, res)=>{
     } catch (error) {
         console.log('Error en la  eliminacion de producto: ', error)
         res.json({msj: "Error"}) 
+    }
+}
+
+export const postRemission = async (req, res) =>{
+    try {
+        console.log('Estamos intentando crear una nueva remisión')
+        const {} = req.body
+            const db = await connect()
+            const response = await db.query("INSERT INTO remission() VALUES (?)",[res[0][0].n])
+            res.json({
+                ok:true,
+                msj:"remisión creada",
+                status: 300,
+            })
+            db.end()
+    } catch (error) {
+            res.json({
+                ok:false,
+                msj:error,
+                status: 560,
+            })
+        console.log('Error en la creacion: ', error)
+    }
+}
+
+export const getRemission = async (req, res)=>{
+    try { 
+        const db = await connect()
+        const [response] = await db.query("SELECT * FROM remission")
+        res.json(response)
+        db.end()
+    } catch (error) {
+        console.log(error)
     }
 }
