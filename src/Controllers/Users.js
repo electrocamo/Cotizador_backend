@@ -101,7 +101,13 @@ export const getUsers = async (req, res)=>{
         const [response] = await db.query("SELECT * FROM users")
         console.log(response)
         res.json(response)
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
     } catch (error) {
         console.log(error)
     }
@@ -115,7 +121,13 @@ export const putUsers = async (req, res)=>{
         const response = await db.query("UPDATE users SET nombre = ?, apellidos = ? , tipo = ?, cc = ? , correo = ?, telefono = ?, roles = ? WHERE Id = ?",[name, surNames, type, numbreDocument, email, phone, roles, Id]).catch((error)=>{console.log("Error: ", error)});
         console.log("response: ", response)
         res.json({msj:"Actualizado Usuario"})
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
     } catch (error) {
         console.log('Error en la subida: ', error)
         res.json({msj: "Error"}) 
@@ -130,7 +142,13 @@ export const deleteUsers = async (req, res)=>{
         const db = await connect()
         const response = await db.query("DELETE From users WHERE Id = ?",Id)
         res.json({msj:"Borrar usuario"})
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
     } catch (error) {
         console.log('Error en la  eliminacion de producto: ', error)
         res.json({msj: "Error"}) 

@@ -6,7 +6,13 @@ export const getCLient = async (req, res)=>{
         const [response] = await db.query("SELECT * FROM clientes")
         console.log(response)
         res.json(response)
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
     } catch (error) {
         console.log(error)
     }
@@ -26,7 +32,13 @@ export const postClient = async (req, res) =>{
                 msj:"Cliente creado",
                 status: 300,
             })
-            db.end()
+            db.end((err) => {
+                if (err) {
+                  console.error('Error al cerrar la conexión:', err);
+                  return;
+                }
+                console.log('Conexión cerrada correctamente.');
+            });
     } catch (error) {
         console.log('Error en la creacion: ', error)
         res.json({
@@ -45,7 +57,13 @@ export const putEditClient = async (req, res)=>{
         const response = await db.query("UPDATE clientes SET cliente = ?, telefono = ?, correo = ?, nitocc = ?, contacto = ?, direccion = ?, documentType = ? WHERE Id = ?",
         [name, phone, email, numbreDocument, contact, direction, typeDocument, id])
         res.json({msj:"Actualizado cliente"})
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
     } catch (error) {
         console.log('Error en la subida: ', error)
         res.json({msj: error}) 
@@ -59,7 +77,13 @@ export const deleteCliente = async (req, res)=>{
         const db = await connect()
         const response = await db.query("DELETE From clientes WHERE Id = ?",Id)
         res.json({msj:"Borrar cliente"})
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
     } catch (error) {
         console.log('Error en la  eliminacion del cliente: ', error)
         res.json({msj: "Error"}) 

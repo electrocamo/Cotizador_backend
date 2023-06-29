@@ -6,7 +6,13 @@ export const getproducts = async (req, res)=>{
         const [response] = await db.query("SELECT * FROM productos")
         console.log(response)
         res.json(response)
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+        });
     } catch (error) {
         console.log(error)
     }
@@ -23,7 +29,13 @@ export const postproduct = async (req, res) =>{
                 msj:"Producto creado",
                 status: 300,
             })
-            db.end()
+            db.end((err) => {
+                if (err) {
+                  console.error('Error al cerrar la conexión:', err);
+                  return;
+                }
+                console.log('Conexión cerrada correctamente.');
+            });
     } catch (error) {
             res.json({
                 ok:false,
@@ -41,7 +53,13 @@ export const deleteProduct = async (req, res)=>{
         const db = await connect()
         const response = await db.query("DELETE From productos WHERE Id = ?",Id)
         res.json({msj:"Borrar Productos"})
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+        });
     } catch (error) {
         console.log('Error en la  eliminacion de imagen: ', error)
         res.json({msj: "Error"}) 
@@ -56,7 +74,13 @@ export const putEditProduct = async (req, res)=>{
         const response = await db.query("UPDATE productos SET producto = ?, material = ?, calibre = ?, largo = ?, ancho = ?, precioitem = ?, iva = ? WHERE Id = ?",
         [producto, material, calibre, largo, ancho, precioitem, iva, Id])
         res.json({msj:"Actualizado producto"})
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+        });
     } catch (error) {
         console.log('Error en la subida: ', error)
         res.json({msj: error}) 

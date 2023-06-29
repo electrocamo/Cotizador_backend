@@ -10,7 +10,14 @@ export const getquotes = async (req, res)=>{
             deliveryDate = deliveryDate.split('T')[0];
         })
         res.json(response)
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
+
     } catch (error) {
         console.log(error)
     }
@@ -22,7 +29,14 @@ export const gethistoryproduct = async (req, res)=>{
         const db = await connect()
         const [response] = await db.query("SELECT * FROM historialproductos")
         res.json(response)
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
+         
     } catch (error) {
         console.log(error)
     }
@@ -44,8 +58,14 @@ export const postQuotesaddCLient = async (req, res) =>{
                     status: 300,
                 })
             })
-            db.end()
-    } catch (error) {
+            db.end((err) => {
+                if (err) {
+                  console.error('Error al cerrar la conexión:', err);
+                  return;
+                }
+                console.log('Conexión cerrada correctamente.');
+              });
+            } catch (error) {
         console.log('Error en la creacion: ', error)
             res.json({
                 ok:false,
@@ -70,8 +90,14 @@ export const postQuotes = async (req, res) =>{
                 })
             })
 
-            db.end()
-    } catch (error) {
+            db.end((err) => {
+                if (err) {
+                  console.error('Error al cerrar la conexión:', err);
+                  return;
+                }
+                console.log('Conexión cerrada correctamente.');
+              });
+        } catch (error) {
         console.log('Error en la creacion: ', error)
             res.json({
                 ok:false,
@@ -97,8 +123,14 @@ export const posthistoryproduct = async (req, res) =>{
                 msj:"Producto creado",
                 status: 300,
             })
-            db.end()
-    } catch (error) {
+            db.end((err) => {
+                if (err) {
+                  console.error('Error al cerrar la conexión:', err);
+                  return;
+                }
+                console.log('Conexión cerrada correctamente.');
+              });
+        } catch (error) {
             res.json({
                 ok:false,
                 msj:error,
@@ -120,8 +152,14 @@ export const editthistoryproduct = async (req, res) =>{
                 msj:"Producto creado",
                 status: 300,
             })
-            db.end()
-    } catch (error) {
+            db.end((err) => {
+                if (err) {
+                  console.error('Error al cerrar la conexión:', err);
+                  return;
+                }
+                console.log('Conexión cerrada correctamente.');
+              });
+        } catch (error) {
             res.json({
                 ok:false,
                 msj:error,
@@ -152,7 +190,13 @@ export const putQuotes = async (req, res)=>{
         const response = await db.query("UPDATE cotizaciones SET asesor = ?, nitocc = ?, direccion = ?, contacto = ?, correo = ?, telefono = ?, abono = ?, nrofactura = ?, debe = ?, cliente = ?, image = ?, fechaentrega = ?, preciofinal = ?, itemfinal = ?, observation = ?, documentType = ? WHERE nrocotizacion = ?",
         [vendedor, documento, direccion,  contacto, correo, telefono, abono, factura, debe, cliente, imagen, tiempo, preciofinal, itemfinal, observation, typeDocument, nrocotizacion])
         res.json({msj:"Actualizado Cotizacion"})
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
     } catch (error) {
         console.log('Error en la subida: ', error)
         res.json({msj: error}) 
@@ -168,7 +212,13 @@ export const putEditState = async (req, res)=>{
         const response = await db.query("UPDATE cotizaciones SET estado = ? WHERE nrocotizacion = ?",
         [state, nrocotizacion])
         res.json({msj:"Actualizado cliente"})
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
     } catch (error) {
         console.log('Error en la subida: ', error)
         res.json({msj: error}) 
@@ -183,8 +233,14 @@ export const putEditHistory = async (req, res)=>{
         const response = await db.query("UPDATE historialproductos SET producto = ?, material = ?, calibre = ?, largo = ?, ancho = ?, precioitem = ?, cantidadItem = ?, total = ?, iva = ?, Priceiva = ?, peso = ? WHERE Id = ?",
         [producto, material, calibre, largo, ancho, precioitem, itemtotal, total, iva, Priceiva, peso, Id])
         res.json({msj:"Actualizado producto"})
-        db.end()
-    } catch (error) {
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
+        } catch (error) {
         console.log('Error en la subida: ', error)
         res.json({msj: error}) 
     }
@@ -202,8 +258,14 @@ export const deleteimage = async (req, res)=>{
             rm("/Users/adrian/Desktop/Ander/Backupproyects/BackendCotizadorGeniosTec/uploads/"+ImageDelete)     
         }
         res.json({msj:"Borrar Cotizacion"})
-        db.end()
-    } catch (error) {
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
+        } catch (error) {
         console.log('Error en la  eliminacion de imagen: ', error)
         res.json({msj: "Error"}) 
     }
@@ -216,7 +278,13 @@ export const deleteHistoryProduct = async (req, res)=>{
         const db = await connect()
         const response = await db.query("DELETE From historialproductos WHERE Id = ?",Id)
         res.json({msj:"Borrar Productos"})
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
     } catch (error) {
         console.log('Error en la  eliminacion de producto: ', error)
         res.json({msj: "Error"}) 
@@ -226,31 +294,43 @@ export const deleteHistoryProduct = async (req, res)=>{
 export const postRemission = async (req, res) =>{
     try {
         console.log('Estamos intentando crear una nueva remisión')
-        const {} = req.body
+        const {nrocotizacion} = req.body
             const db = await connect()
-            const response = await db.query("INSERT INTO remission() VALUES (?)",[res[0][0].n])
+            const response = await db.query("INSERT INTO remission(nrocotizacion) VALUES (?)",[nrocotizacion])
             res.json({
                 ok:true,
                 msj:"remisión creada",
                 status: 300,
             })
-            db.end()
-    } catch (error) {
+            db.end((err) => {
+                if (err) {
+                  console.error('Error al cerrar la conexión:', err);
+                  return;
+                }
+                console.log('Conexión cerrada correctamente.');
+              });
+        } catch (error) {
             res.json({
                 ok:false,
                 msj:error,
                 status: 560,
             })
-        console.log('Error en la creacion: ', error)
     }
 }
 
 export const getRemission = async (req, res)=>{
     try { 
         const db = await connect()
-        const [response] = await db.query("SELECT * FROM remission")
+        const [response] = await db.query("SELECT * FROM Remission")
+        console.log(response)
         res.json(response)
-        db.end()
+        db.end((err) => {
+            if (err) {
+              console.error('Error al cerrar la conexión:', err);
+              return;
+            }
+            console.log('Conexión cerrada correctamente.');
+          });
     } catch (error) {
         console.log(error)
     }
