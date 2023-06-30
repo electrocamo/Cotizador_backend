@@ -185,7 +185,7 @@ export const putQuotes = async (req, res)=>{
     try {
         console.log("Estamos intentando editar una cotizacion")   
         const {nrocotizacion, cliente, typeDocument, documento, contacto, telefono, direccion, correo, vendedor, abono, factura, tiempo, imagen, preciofinal, itemfinal, debe, observation} = req.body 
-        console.log("typeDocument: ", typeDocument)
+        console.log("imagen: ", imagen)
         const db = await connect()
         const response = await db.query("UPDATE cotizaciones SET asesor = ?, nitocc = ?, direccion = ?, contacto = ?, correo = ?, telefono = ?, abono = ?, nrofactura = ?, debe = ?, cliente = ?, image = ?, fechaentrega = ?, preciofinal = ?, itemfinal = ?, observation = ?, documentType = ? WHERE nrocotizacion = ?",
         [vendedor, documento, direccion,  contacto, correo, telefono, abono, factura, debe, cliente, imagen, tiempo, preciofinal, itemfinal, observation, typeDocument, nrocotizacion])
