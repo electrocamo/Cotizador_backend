@@ -200,3 +200,17 @@ UNLOCK TABLES;
 
 CREATE TABLE remission (Remission INT NOT NULL PRIMARY KEY AUTO_INCREMENT, fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, nrocotizacion VARCHAR(100) NOT NULL);
 CREATE UNIQUE INDEX index_nrocotizacion ON Remission (nrocotizacion);
+
+DELIMITER //
+
+CREATE PROCEDURE ()
+BEGIN
+    -- Insertar registros con estado determinado en tabla_destino
+    INSERT INTO remission (nrocotizacion) SELECT nrocotizacion FROM cotizaciones WHERE estado = 'entregado';
+
+    -- Eliminar registros con estado determinado de tabla_origen
+    DELETE FROM tabla_origen
+    WHERE estado = 'estado_determinado';
+END //
+
+DELIMITER ;

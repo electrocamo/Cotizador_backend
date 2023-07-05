@@ -78,10 +78,11 @@ export const postQuotesaddCLient = async (req, res) =>{
 export const postQuotes = async (req, res) =>{
         try {
         console.log('Estamos intentando crear una nueva cotizacion')
-        const {date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image,  priceEnd, itemEnd,observation} = req.body
-            const db = await connect()
-            await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image,  priceEnd, itemEnd, observation, typeDocument])
+        const {date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image,  priceEnd, itemEnd, observation, estado} = req.body
+        // console.log('date: ', date, " seller: ", seller, " typeDocument: ", typeDocument, " citizenshipCard: ", citizenshipCard, " direction: ", direction, " contact: ", contact, " phone: ", phone, " client: ", client, " payment: ", payment, " email: ", email, " youMay: ", youMay, " invoiceNumber: ", invoiceNumber, " image: ", image, " priceEnd: ", priceEnd, " itemEnd: ", itemEnd, " observation: ", observation, "estado: ", estado)    
+        const db = await connect()
+            await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType, estado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image,  priceEnd, itemEnd, observation, typeDocument, estado])
             .then((response) => {
                 res.json({
                     ok:true,
