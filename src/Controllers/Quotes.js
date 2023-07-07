@@ -45,12 +45,12 @@ export const gethistoryproduct = async (req, res)=>{
 export const postQuotesaddCLient = async (req, res) =>{
     try {
         console.log('Estamos intentando crear una nueva cotizacion con cliente nuevo')
-        const {date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image, priceEnd, itemEnd,observation} = req.body
+        const {date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image, priceEnd, itemEnd,observation, estado, contactName} = req.body
             const db = await connect()
-            await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image, priceEnd, itemEnd,observation, typeDocument])
-            const clientTable = await db.query("INSERT INTO clientes(nitocc, direccion, contacto, telefono, cliente, correo, documentType) VALUES (?,?,?,?,?,?,?)",
-            [citizenshipCard, direction, contact, phone, client, email, typeDocument])
+            await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType, estado, contactName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image, priceEnd, itemEnd,observation, typeDocument, estado, contactName])
+            const clientTable = await db.query("INSERT INTO clientes(nitocc, direccion, contacto, telefono, cliente, correo, documentType, contactName) VALUES (?,?,?,?,?,?,?,?)",
+            [citizenshipCard, direction, contact, phone, client, email, typeDocument, contactName])
             .then((response) => {
                 res.json({
                     ok:true,
@@ -78,11 +78,11 @@ export const postQuotesaddCLient = async (req, res) =>{
 export const postQuotes = async (req, res) =>{
         try {
         console.log('Estamos intentando crear una nueva cotizacion')
-        const {date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image,  priceEnd, itemEnd, observation, estado} = req.body
+        const {date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image,  priceEnd, itemEnd, observation, estado, contactName} = req.body
         // console.log('date: ', date, " seller: ", seller, " typeDocument: ", typeDocument, " citizenshipCard: ", citizenshipCard, " direction: ", direction, " contact: ", contact, " phone: ", phone, " client: ", client, " payment: ", payment, " email: ", email, " youMay: ", youMay, " invoiceNumber: ", invoiceNumber, " image: ", image, " priceEnd: ", priceEnd, " itemEnd: ", itemEnd, " observation: ", observation, "estado: ", estado)    
         const db = await connect()
-            await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType, estado) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image,  priceEnd, itemEnd, observation, typeDocument, estado])
+            await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType, estado, contactName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image,  priceEnd, itemEnd, observation, typeDocument, estado, contactName])
             .then((response) => {
                 res.json({
                     ok:true,
@@ -185,11 +185,11 @@ export const Uploadfile = async (req, res) =>{
 export const putQuotes = async (req, res)=>{
     try {
         console.log("Estamos intentando editar una cotizacion")   
-        const {nrocotizacion, cliente, typeDocument, documento, contacto, telefono, direccion, correo, vendedor, abono, factura, tiempo, imagen, preciofinal, itemfinal, debe, observation} = req.body 
-        console.log("imagen: ", imagen)
+        const {nrocotizacion, cliente, typeDocument, documento, contacto, telefono, direccion, correo, vendedor, abono, factura, tiempo, imagen, preciofinal, itemfinal, debe, observation, contactName} = req.body 
+        console.log("contactName: ", contactName)
         const db = await connect()
-        const response = await db.query("UPDATE cotizaciones SET asesor = ?, nitocc = ?, direccion = ?, contacto = ?, correo = ?, telefono = ?, abono = ?, nrofactura = ?, debe = ?, cliente = ?, image = ?, fechaentrega = ?, preciofinal = ?, itemfinal = ?, observation = ?, documentType = ? WHERE nrocotizacion = ?",
-        [vendedor, documento, direccion,  contacto, correo, telefono, abono, factura, debe, cliente, imagen, tiempo, preciofinal, itemfinal, observation, typeDocument, nrocotizacion])
+        const response = await db.query("UPDATE cotizaciones SET asesor = ?, nitocc = ?, direccion = ?, contacto = ?, correo = ?, telefono = ?, abono = ?, nrofactura = ?, debe = ?, cliente = ?, image = ?, fechaentrega = ?, preciofinal = ?, itemfinal = ?, observation = ?, documentType = ?, contactName = ? WHERE nrocotizacion = ?",
+        [vendedor, documento, direccion,  contacto, correo, telefono, abono, factura, debe, cliente, imagen, tiempo, preciofinal, itemfinal, observation, typeDocument, contactName, nrocotizacion])
         res.json({msj:"Actualizado Cotizacion"})
         db.end((err) => {
             if (err) {

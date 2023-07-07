@@ -22,10 +22,10 @@ export const getCLient = async (req, res)=>{
 export const postClient = async (req, res) =>{
     try {
         console.log('Estamos intentando crear un nuevo cliente')
-        const {name, typeDocument, phone, email, numbreDocument, contact, direction} = req.body
+        const {name, typeDocument, phone, email, numbreDocument, contact, direction, contactName} = req.body
         console.log("typeDocument: ", typeDocument)
             const db = await connect()
-            const response = await db.query("INSERT INTO clientes(cliente, telefono, correo, nitocc, contacto, direccion, documentType) VALUES (?,?,?,?,?,?,?)",[name, phone, email, numbreDocument, contact, direction, typeDocument])
+            const response = await db.query("INSERT INTO clientes(cliente, telefono, correo, nitocc, contacto, direccion, documentType, contactName) VALUES (?,?,?,?,?,?,?,?)",[name, phone, email, numbreDocument, contact, direction, typeDocument, contactName])
             // console.log(`El usuario ${name} a creado correctamente con contrasena `)
             res.json({
                 ok:true,
@@ -52,10 +52,10 @@ export const postClient = async (req, res) =>{
 export const putEditClient = async (req, res)=>{
     try {
         console.log("Estamos intentando editar un cliente")   
-        const {id, name, numbreDocument, phone, email, direction, contact, typeDocument} = req.body 
+        const {id, name, numbreDocument, phone, email, direction, contact, typeDocument, contactName} = req.body 
         const db = await connect()
-        const response = await db.query("UPDATE clientes SET cliente = ?, telefono = ?, correo = ?, nitocc = ?, contacto = ?, direccion = ?, documentType = ? WHERE Id = ?",
-        [name, phone, email, numbreDocument, contact, direction, typeDocument, id])
+        const response = await db.query("UPDATE clientes SET cliente = ?, telefono = ?, correo = ?, nitocc = ?, contacto = ?, direccion = ?, documentType = ?, contactName = ? WHERE Id = ?",
+        [name, phone, email, numbreDocument, contact, direction, typeDocument, contactName, id])
         res.json({msj:"Actualizado cliente"})
         db.end((err) => {
             if (err) {
