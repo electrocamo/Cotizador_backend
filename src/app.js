@@ -5,7 +5,7 @@ import RouterClient from "./routers/client";
 import Routerquotes from "./routers/quotes";
 import RouterProducts from "./routers/products";
 import Routerusers from "./routers/users";
-import { urlarchivos } from "./config";
+import { urlarchivos } from "./Config";
 
 const app = express() 
 

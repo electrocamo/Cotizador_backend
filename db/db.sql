@@ -17,7 +17,9 @@
 
 --
 -- Table structure for table `clientes`
---
+-- 
+
+--CREATE DATABASE backendcotizador;
 
 DROP TABLE IF EXISTS `clientes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

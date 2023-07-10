@@ -8,13 +8,13 @@ export const getproducts = async (req, res)=>{
         res.json(response)
         db.end((err) => {
             if (err) {
-              console.error('Error al cerrar la conexión:', err);
+              //console.error('Error al cerrar la conexión:', err);
               return;
             }
-            console.log('Conexión cerrada correctamente.');
+            //console.log('Conexión cerrada correctamente.');
         });
     } catch (error) {
-        console.log(error)
+        //console.log(error)
     }
 }
 
@@ -31,10 +31,10 @@ export const postproduct = async (req, res) =>{
             })
             db.end((err) => {
                 if (err) {
-                  console.error('Error al cerrar la conexión:', err);
+                  //console.error('Error al cerrar la conexión:', err);
                   return;
                 }
-                console.log('Conexión cerrada correctamente.');
+                //console.log('Conexión cerrada correctamente.');
             });
     } catch (error) {
             res.json({
@@ -42,7 +42,7 @@ export const postproduct = async (req, res) =>{
                 msj:error,
                 status: 560,
             })
-        console.log('Error en la creacion: ', error)
+        //console.log('Error en la creacion: ', error)
     }
 }
 
@@ -55,13 +55,13 @@ export const deleteProduct = async (req, res)=>{
         res.json({msj:"Borrar Productos"})
         db.end((err) => {
             if (err) {
-              console.error('Error al cerrar la conexión:', err);
+              //console.error('Error al cerrar la conexión:', err);
               return;
             }
-            console.log('Conexión cerrada correctamente.');
+            //console.log('Conexión cerrada correctamente.');
         });
     } catch (error) {
-        console.log('Error en la  eliminacion de imagen: ', error)
+        //console.log('Error en la  eliminacion de imagen: ', error)
         res.json({msj: "Error"}) 
     }
 }
@@ -76,13 +76,13 @@ export const putEditProduct = async (req, res)=>{
         res.json({msj:"Actualizado producto"})
         db.end((err) => {
             if (err) {
-              console.error('Error al cerrar la conexión:', err);
+              //console.error('Error al cerrar la conexión:', err);
               return;
             }
-            console.log('Conexión cerrada correctamente.');
+            //console.log('Conexión cerrada correctamente.');
         });
     } catch (error) {
-        console.log('Error en la subida: ', error)
+        //console.log('Error en la subida: ', error)
         res.json({msj: error}) 
     }
 }
