@@ -112,6 +112,7 @@ export const posthistoryproduct = async (req, res) =>{
     try {
         console.log('Estamos intentando crear un nuevo producto en el historial')
         const {product, material, caliber, long, width, itemPrice, totalItem, total, iva, Priceiva, weight} = req.body
+            console.log("req.body: ", req.body)
             const db = await connect()
             await db.query("SELECT MAX(nrocotizacion) as n FROM cotizaciones")
             .then(async(res) => {
