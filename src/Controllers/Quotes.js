@@ -1,22 +1,24 @@
 import { connect } from '../../db/database'
 import { rm } from 'fs/promises';
+import moment from 'moment';
+import 'moment-timezone'; // No necesitas asignar esto a una variable
 
-export const getquotes = async (req, res)=>{
-    try { 
+export const getquotes = async (req, res) => {
+    try {
         const db = await connect()
         const [response] = await db.query("SELECT * FROM cotizaciones")
-        response.map((item)=>{
+        response.map((item) => {
             var deliveryDate = '' + item.fecha
             deliveryDate = deliveryDate.split('T')[0];
         })
         res.json(response)
         db.end((err) => {
             if (err) {
-              console.error('Error al cerrar la conexión:', err);
-              return;
+                console.error('Error al cerrar la conexión:', err);
+                return;
             }
             console.log('Conexión cerrada correctamente.');
-          });
+        });
 
     } catch (error) {
         console.log(error)
@@ -24,155 +26,163 @@ export const getquotes = async (req, res)=>{
 }
 
 
-export const gethistoryproduct = async (req, res)=>{
-    try { 
+export const gethistoryproduct = async (req, res) => {
+    try {
         const db = await connect()
         const [response] = await db.query("SELECT * FROM historialproductos")
         res.json(response)
         db.end((err) => {
             if (err) {
-              console.error('Error al cerrar la conexión:', err);
-              return;
+                console.error('Error al cerrar la conexión:', err);
+                return;
             }
             console.log('Conexión cerrada correctamente.');
-          });
-         
+        });
+
     } catch (error) {
         console.log(error)
     }
 }
 
-export const postQuotesaddCLient = async (req, res) =>{
+export const postQuotesaddCLient = async (req, res) => {
     try {
         console.log('Estamos intentando crear una nueva cotizacion con cliente nuevo')
-        const {date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image, priceEnd, itemEnd,observation, estado, contactName} = req.body
-            const db = await connect()
-            await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType, estado, contactName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image, priceEnd, itemEnd,observation, typeDocument, estado, contactName])
-            const clientTable = await db.query("INSERT INTO clientes(nitocc, direccion, contacto, telefono, cliente, correo, documentType, contactName) VALUES (?,?,?,?,?,?,?,?)",
+        const { date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image, priceEnd, itemEnd, observation, estado, contactName } = req.body
+        const formattedDateTime = moment.utc(date).format('YYYY-MM-DD HH:mm:ss');
+        console.log('formattedDateTime:', formattedDateTime);
+
+        const db = await connect()
+        await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType, estado, contactName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            [parsedDate, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image, priceEnd, itemEnd, observation, typeDocument, estado, contactName])
+        const clientTable = await db.query("INSERT INTO clientes(nitocc, direccion, contacto, telefono, cliente, correo, documentType, contactName) VALUES (?,?,?,?,?,?,?,?)",
             [citizenshipCard, direction, contact, phone, client, email, typeDocument, contactName])
             .then((response) => {
                 res.json({
-                    ok:true,
-                    msj:"Cliente y Cotizacion creado",
+                    ok: true,
+                    msj: "Cliente y Cotizacion creado",
                     status: 300,
                 })
             })
-            db.end((err) => {
-                if (err) {
-                  console.error('Error al cerrar la conexión:', err);
-                  return;
-                }
-                console.log('Conexión cerrada correctamente.');
-              });
-            } catch (error) {
+        db.end((err) => {
+            if (err) {
+                console.error('Error al cerrar la conexión:', err);
+                return;
+            }
+            console.log('Conexión cerrada correctamente.');
+        });
+    } catch (error) {
         console.log('Error en la creacion: ', error)
-            res.json({
-                ok:false,
-                msj:error,
-                status: 430,
-            })
+        res.json({
+            ok: false,
+            msj: error,
+            status: 430,
+        })
     }
 }
 
-export const postQuotes = async (req, res) =>{
-        try {
+export const postQuotes = async (req, res) => {
+    try {
         console.log('Estamos intentando crear una nueva cotizacion')
-        const {date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image,  priceEnd, itemEnd, observation, estado, contactName} = req.body
+        const { date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image, priceEnd, itemEnd, observation, estado, contactName } = req.body
+        console.log('date:', date)
+        // const formattedDate = moment(date, 'DD/MM/YYYY hh:mm A').format('YYYY-MM-DD HH:mm:ss');
+        const formattedDateTime = moment.utc(date).format('YYYY-MM-DD HH:mm:ss');
+        console.log('formattedDateTime:', formattedDateTime);
+                
         // console.log('date: ', date, " seller: ", seller, " typeDocument: ", typeDocument, " citizenshipCard: ", citizenshipCard, " direction: ", direction, " contact: ", contact, " phone: ", phone, " client: ", client, " payment: ", payment, " email: ", email, " youMay: ", youMay, " invoiceNumber: ", invoiceNumber, " image: ", image, " priceEnd: ", priceEnd, " itemEnd: ", itemEnd, " observation: ", observation, "estado: ", estado)    
         const db = await connect()
-            await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType, estado, contactName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [date, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image,  priceEnd, itemEnd, observation, typeDocument, estado, contactName])
+        await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType, estado, contactName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            [formattedDateTime, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image, priceEnd, itemEnd, observation, typeDocument, estado, contactName])
             .then((response) => {
                 res.json({
-                    ok:true,
-                    msj:"Cotizacion creado",
+                    ok: true,
+                    msj: "Cotizacion creado",
                     status: 300,
                 })
             })
 
-            db.end((err) => {
-                if (err) {
-                  console.error('Error al cerrar la conexión:', err);
-                  return;
-                }
-                console.log('Conexión cerrada correctamente.');
-              });
-        } catch (error) {
+        db.end((err) => {
+            if (err) {
+                console.error('Error al cerrar la conexión:', err);
+                return;
+            }
+            console.log('Conexión cerrada correctamente.');
+        });
+    } catch (error) {
         console.log('Error en la creacion: ', error)
-            res.json({
-                ok:false,
-                msj:"Cotizacion Fallida",
-                status: 400,
-            })
+        res.json({
+            ok: false,
+            msj: "Cotizacion Fallida",
+            status: 400,
+        })
     }
 }
 
-export const posthistoryproduct = async (req, res) =>{
+export const posthistoryproduct = async (req, res) => {
     try {
         console.log('Estamos intentando crear un nuevo producto en el historial')
-        const {product, material, caliber, long, width, itemPrice, totalItem, total, iva, Priceiva, weight} = req.body
-            console.log("req.body: ", req.body)
-            const db = await connect()
-            await db.query("SELECT MAX(nrocotizacion) as n FROM cotizaciones")
-            .then(async(res) => {
+        const { product, material, caliber, long, width, itemPrice, totalItem, total, iva, Priceiva, weight } = req.body
+        console.log("req.body: ", req.body)
+        const db = await connect()
+        await db.query("SELECT MAX(nrocotizacion) as n FROM cotizaciones")
+            .then(async (res) => {
                 //console.log("El id de cotizacion: ",res[0][0].n)
-                const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion, iva, Priceiva, peso) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",[product, material, caliber, long, width, itemPrice, totalItem, total, res[0][0].n, iva, Priceiva, weight])
+                const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion, iva, Priceiva, peso) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", [product, material, caliber, long, width, itemPrice, totalItem, total, res[0][0].n, iva, Priceiva, weight])
             })
 
-            res.json({
-                ok:true,
-                msj:"Producto creado",
-                status: 300,
-            })
-            db.end((err) => {
-                if (err) {
-                  console.error('Error al cerrar la conexión:', err);
-                  return;
-                }
-                console.log('Conexión cerrada correctamente.');
-              });
-        } catch (error) {
-            res.json({
-                ok:false,
-                msj:error,
-                status: 560,
-            })
+        res.json({
+            ok: true,
+            msj: "Producto creado",
+            status: 300,
+        })
+        db.end((err) => {
+            if (err) {
+                console.error('Error al cerrar la conexión:', err);
+                return;
+            }
+            console.log('Conexión cerrada correctamente.');
+        });
+    } catch (error) {
+        res.json({
+            ok: false,
+            msj: error,
+            status: 560,
+        })
         console.log('Error en la creacion: ', error)
     }
 }
 
-export const editthistoryproduct = async (req, res) =>{
+export const editthistoryproduct = async (req, res) => {
     try {
         console.log('Estamos intentando crear un producto en el historial')
-        const {product, material, caliber, long, width, itemPrice, totalItem, total, nrocotizacion,  iva, Priceiva, weight} = req.body
-            const db = await connect()
-            const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion,  iva, Priceiva, peso) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",[product, material, caliber, long, width, itemPrice, totalItem, total,nrocotizacion, iva, Priceiva, weight])
+        const { product, material, caliber, long, width, itemPrice, totalItem, total, nrocotizacion, iva, Priceiva, weight } = req.body
+        const db = await connect()
+        const response = await db.query("INSERT INTO historialproductos(producto, material, calibre, largo, ancho, precioitem, cantidadItem, total, nrocotizacion,  iva, Priceiva, peso) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", [product, material, caliber, long, width, itemPrice, totalItem, total, nrocotizacion, iva, Priceiva, weight])
 
-            res.json({
-                ok:true,
-                msj:"Producto creado",
-                status: 300,
-            })
-            db.end((err) => {
-                if (err) {
-                  console.error('Error al cerrar la conexión:', err);
-                  return;
-                }
-                console.log('Conexión cerrada correctamente.');
-              });
-        } catch (error) {
-            res.json({
-                ok:false,
-                msj:error,
-                status: 560,
-            })
+        res.json({
+            ok: true,
+            msj: "Producto creado",
+            status: 300,
+        })
+        db.end((err) => {
+            if (err) {
+                console.error('Error al cerrar la conexión:', err);
+                return;
+            }
+            console.log('Conexión cerrada correctamente.');
+        });
+    } catch (error) {
+        res.json({
+            ok: false,
+            msj: error,
+            status: 560,
+        })
         console.log('Error en la creacion: ', error)
     }
 }
 
 
-export const Uploadfile = async (req, res) =>{
+export const Uploadfile = async (req, res) => {
     try {
         console.log('Archivo resivido: ', req.body)
         const file = req.body.file
@@ -183,156 +193,156 @@ export const Uploadfile = async (req, res) =>{
     }
 }
 
-export const putQuotes = async (req, res)=>{
+export const putQuotes = async (req, res) => {
     try {
-        console.log("Estamos intentando editar una cotizacion")   
-        const {nrocotizacion, cliente, typeDocument, documento, contacto, telefono, direccion, correo, vendedor, abono, factura, tiempo, imagen, preciofinal, itemfinal, debe, observation, contactName} = req.body 
+        console.log("Estamos intentando editar una cotizacion")
+        const { nrocotizacion, cliente, typeDocument, documento, contacto, telefono, direccion, correo, vendedor, abono, factura, tiempo, imagen, preciofinal, itemfinal, debe, observation, contactName } = req.body
         console.log("contactName: ", contactName)
         const db = await connect()
         const response = await db.query("UPDATE cotizaciones SET asesor = ?, nitocc = ?, direccion = ?, contacto = ?, correo = ?, telefono = ?, abono = ?, nrofactura = ?, debe = ?, cliente = ?, image = ?, fechaentrega = ?, preciofinal = ?, itemfinal = ?, observation = ?, documentType = ?, contactName = ? WHERE nrocotizacion = ?",
-        [vendedor, documento, direccion,  contacto, correo, telefono, abono, factura, debe, cliente, imagen, tiempo, preciofinal, itemfinal, observation, typeDocument, contactName, nrocotizacion])
-        res.json({msj:"Actualizado Cotizacion"})
+            [vendedor, documento, direccion, contacto, correo, telefono, abono, factura, debe, cliente, imagen, tiempo, preciofinal, itemfinal, observation, typeDocument, contactName, nrocotizacion])
+        res.json({ msj: "Actualizado Cotizacion" })
         db.end((err) => {
             if (err) {
-              console.error('Error al cerrar la conexión:', err);
-              return;
+                console.error('Error al cerrar la conexión:', err);
+                return;
             }
             console.log('Conexión cerrada correctamente.');
-          });
+        });
     } catch (error) {
         console.log('Error en la subida: ', error)
-        res.json({msj: error}) 
+        res.json({ msj: error })
     }
 }
 
-export const putEditState = async (req, res)=>{
+export const putEditState = async (req, res) => {
     try {
-        console.log("Estamos intentando editar un cliente")   
-        const {state, nrocotizacion } = req.body 
+        console.log("Estamos intentando editar un cliente")
+        const { state, nrocotizacion } = req.body
         console.log("Cambiando el estado a: ", state, "Del numero de cotizacion: ", nrocotizacion)
         const db = await connect()
         const response = await db.query("UPDATE cotizaciones SET estado = ? WHERE nrocotizacion = ?",
-        [state, nrocotizacion])
-        res.json({msj:"Actualizado cliente"})
+            [state, nrocotizacion])
+        res.json({ msj: "Actualizado cliente" })
         db.end((err) => {
             if (err) {
-              console.error('Error al cerrar la conexión:', err);
-              return;
+                console.error('Error al cerrar la conexión:', err);
+                return;
             }
             console.log('Conexión cerrada correctamente.');
-          });
+        });
     } catch (error) {
         console.log('Error en la subida: ', error)
-        res.json({msj: error}) 
+        res.json({ msj: error })
     }
 }
 
-export const putEditHistory = async (req, res)=>{
+export const putEditHistory = async (req, res) => {
     try {
-        console.log("Estamos intentando editar un producto del historial")   
-        const {Id, producto, material, ancho, largo, calibre, itemtotal, precioitem, total, iva, Priceiva, peso} = req.body 
+        console.log("Estamos intentando editar un producto del historial")
+        const { Id, producto, material, ancho, largo, calibre, itemtotal, precioitem, total, iva, Priceiva, peso } = req.body
         const db = await connect()
         const response = await db.query("UPDATE historialproductos SET producto = ?, material = ?, calibre = ?, largo = ?, ancho = ?, precioitem = ?, cantidadItem = ?, total = ?, iva = ?, Priceiva = ?, peso = ? WHERE Id = ?",
-        [producto, material, calibre, largo, ancho, precioitem, itemtotal, total, iva, Priceiva, peso, Id])
-        res.json({msj:"Actualizado producto"})
+            [producto, material, calibre, largo, ancho, precioitem, itemtotal, total, iva, Priceiva, peso, Id])
+        res.json({ msj: "Actualizado producto" })
         db.end((err) => {
             if (err) {
-              console.error('Error al cerrar la conexión:', err);
-              return;
+                console.error('Error al cerrar la conexión:', err);
+                return;
             }
             console.log('Conexión cerrada correctamente.');
-          });
-        } catch (error) {
+        });
+    } catch (error) {
         console.log('Error en la subida: ', error)
-        res.json({msj: error}) 
+        res.json({ msj: error })
     }
 }
 
-export const deleteimage = async (req, res)=>{
+export const deleteimage = async (req, res) => {
     try {
-        const {nrocotizacion, ImageDelete} = req.body 
-        console.log("Borrar: ", nrocotizacion)   
+        const { nrocotizacion, ImageDelete } = req.body
+        console.log("Borrar: ", nrocotizacion)
         const db = await connect()
-        const response = await db.query("DELETE From cotizaciones WHERE nrocotizacion = ?",nrocotizacion)
-        if(ImageDelete == ''){
+        const response = await db.query("DELETE From cotizaciones WHERE nrocotizacion = ?", nrocotizacion)
+        if (ImageDelete == '') {
             console.log("ImageDelete esta vacio")
-        }else{
-            rm("/Users/adrian/Desktop/Ander/Backupproyects/BackendCotizadorGeniosTec/uploads/"+ImageDelete)     
+        } else {
+            rm("/Users/adrian/Desktop/Ander/Backupproyects/BackendCotizadorGeniosTec/uploads/" + ImageDelete)
         }
-        res.json({msj:"Borrar Cotizacion"})
+        res.json({ msj: "Borrar Cotizacion" })
         db.end((err) => {
             if (err) {
-              console.error('Error al cerrar la conexión:', err);
-              return;
+                console.error('Error al cerrar la conexión:', err);
+                return;
             }
             console.log('Conexión cerrada correctamente.');
-          });
-        } catch (error) {
+        });
+    } catch (error) {
         console.log('Error en la  eliminacion de imagen: ', error)
-        res.json({msj: "Error"}) 
+        res.json({ msj: "Error" })
     }
 }
 
-export const deleteHistoryProduct = async (req, res)=>{
+export const deleteHistoryProduct = async (req, res) => {
     try {
-        const {Id} = req.body 
-        console.log("Borrar: ", Id)   
+        const { Id } = req.body
+        console.log("Borrar: ", Id)
         const db = await connect()
-        const response = await db.query("DELETE From historialproductos WHERE Id = ?",Id)
-        res.json({msj:"Borrar Productos"})
+        const response = await db.query("DELETE From historialproductos WHERE Id = ?", Id)
+        res.json({ msj: "Borrar Productos" })
         db.end((err) => {
             if (err) {
-              console.error('Error al cerrar la conexión:', err);
-              return;
+                console.error('Error al cerrar la conexión:', err);
+                return;
             }
             console.log('Conexión cerrada correctamente.');
-          });
+        });
     } catch (error) {
         console.log('Error en la  eliminacion de producto: ', error)
-        res.json({msj: "Error"}) 
+        res.json({ msj: "Error" })
     }
 }
 
-export const postRemission = async (req, res) =>{
+export const postRemission = async (req, res) => {
     try {
         console.log('Estamos intentando crear una nueva remisión')
-        const {nrocotizacion} = req.body
-            const db = await connect()
-            const response = await db.query("INSERT INTO remission(nrocotizacion) VALUES (?)",[nrocotizacion])
-            res.json({
-                ok:true,
-                msj:"remisión creada",
-                status: 300,
-            })
-            db.end((err) => {
-                if (err) {
-                  console.error('Error al cerrar la conexión:', err);
-                  return;
-                }
-                console.log('Conexión cerrada correctamente.');
-              });
-        } catch (error) {
-            res.json({
-                ok:false,
-                msj:error,
-                status: 560,
-            })
+        const { nrocotizacion } = req.body
+        const db = await connect()
+        const response = await db.query("INSERT INTO remission(nrocotizacion) VALUES (?)", [nrocotizacion])
+        res.json({
+            ok: true,
+            msj: "remisión creada",
+            status: 300,
+        })
+        db.end((err) => {
+            if (err) {
+                console.error('Error al cerrar la conexión:', err);
+                return;
+            }
+            console.log('Conexión cerrada correctamente.');
+        });
+    } catch (error) {
+        res.json({
+            ok: false,
+            msj: error,
+            status: 560,
+        })
     }
 }
 
-export const getRemission = async (req, res)=>{
-    try { 
+export const getRemission = async (req, res) => {
+    try {
         const db = await connect()
         const [response] = await db.query("SELECT * FROM Remission")
         console.log(response)
         res.json(response)
         db.end((err) => {
             if (err) {
-              console.error('Error al cerrar la conexión:', err);
-              return;
+                console.error('Error al cerrar la conexión:', err);
+                return;
             }
             console.log('Conexión cerrada correctamente.');
-          });
+        });
     } catch (error) {
         console.log(error)
     }
