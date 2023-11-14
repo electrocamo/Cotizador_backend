@@ -50,9 +50,13 @@ export const postQuotesaddCLient = async (req, res) => {
         console.log('Estamos intentando crear una nueva cotizacion con cliente nuevo')
 
         const { date, seller, typeDocument, citizenshipCard, direction, contact, phone, client, payment, email, youMay, invoiceNumber, image, priceEnd, itemEnd, observation, estado, contactName } = req.body
-        const formattedDateTime = moment.utc(date).format('YYYY-MM-DD HH:mm:ss');
-        console.log('formattedDateTime:', formattedDateTime);
-
+        let formattedDateTime
+        if(date === null){
+        formattedDateTime = null;
+       }else{
+        console.log('date:', date)
+        formattedDateTime = moment.utc(date).format('YYYY-MM-DD HH:mm:ss');
+       }
         const db = await connect()
         await db.query("INSERT INTO cotizaciones(fechaentrega, asesor, nitocc, direccion, contacto, telefono, cliente, debe, correo, abono, nrofactura, image, preciofinal, itemfinal,observation, documentType, estado, contactName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             [parsedDate, seller, citizenshipCard, direction, contact, phone, client, youMay, email, payment, invoiceNumber, image, priceEnd, itemEnd, observation, typeDocument, estado, contactName])
@@ -90,7 +94,6 @@ export const postQuotes = async (req, res) => {
         let formattedDateTime
         if(date === null){
         formattedDateTime = null;
-
        }else{
         console.log('date:', date)
         formattedDateTime = moment.utc(date).format('YYYY-MM-DD HH:mm:ss');
